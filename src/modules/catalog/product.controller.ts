@@ -46,6 +46,19 @@ export class ProductController {
     return this.productService.findAll();
   }
 
+  @ApiOperation({ summary: 'Get products by category' })
+  @ApiResponse({
+    status: 200,
+    description: 'Return products by category.',
+    type: Product,
+    isArray: true,
+  })
+  @ApiUnauthorizedResponse({ status: 401, description: 'Unauthorized.' })
+  @Get('byCategory/:id')
+  getProductsByCategory(@Param('id') id: number): Promise<Product[]> {
+    return this.productService.findByCategory(id);
+  }
+
   @ApiOperation({ summary: 'Get product by id' })
   @ApiResponse({
     status: 200,

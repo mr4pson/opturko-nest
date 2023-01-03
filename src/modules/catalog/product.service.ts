@@ -17,6 +17,16 @@ export class ProductService {
     });
   }
 
+  async findByCategory(categoryId: number): Promise<Product[]> {
+    const products = await this.productRepository.find({
+      where: {
+        category: Equal(categoryId),
+      },
+    });
+
+    return products;
+  }
+
   async findById(id: number): Promise<Product> {
     const product = await this.productRepository.findOneOrFail({
       where: {
