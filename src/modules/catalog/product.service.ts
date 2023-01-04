@@ -22,6 +22,7 @@ export class ProductService {
       where: {
         category: Equal(categoryId),
       },
+      relations: ['category'],
     });
 
     return products;

@@ -20,8 +20,8 @@ async function bootstrap() {
   app.enableCors();
 
   const config = new DocumentBuilder()
-    .setTitle('Cash flow nest app')
-    .setDescription('Cash flow nest API description')
+    .setTitle('Opturko nest app')
+    .setDescription('Opturko nest API description')
     .setVersion('1.0')
     .build();
 
