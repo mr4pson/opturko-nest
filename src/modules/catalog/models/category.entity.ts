@@ -35,6 +35,9 @@ export class Category {
   @ApiProperty({
     type: () => Product,
   })
-  @OneToMany((type) => Product, (product) => product.category)
+  @OneToMany((type) => Product, (product) => product.category, {
+    onDelete: 'CASCADE',
+    cascade: true,
+  })
   products: Product[];
 }
