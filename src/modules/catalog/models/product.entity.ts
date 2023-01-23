@@ -52,7 +52,6 @@ export class Product {
   })
   @ManyToOne((type) => Category, (category) => category.products, {
     onDelete: 'CASCADE',
-    cascade: true,
   })
   category: Category;
 }
