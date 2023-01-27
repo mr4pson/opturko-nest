@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -23,6 +24,7 @@ import { HasRoles } from '../auth/guard/has-roles.decorator';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { RolesGuard } from '../auth/guard/roles.guard';
 import { RoleType } from '../shared/enum/role-type.enum';
+import { ProductsQuery } from './classes/product-query.interface';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './models/product.entity';
 import { ProductService } from './product.service';
@@ -55,8 +57,11 @@ export class ProductController {
   })
   @ApiUnauthorizedResponse({ status: 401, description: 'Unauthorized.' })
   @Get('byCategory/:id')
-  getProductsByCategory(@Param('id') id: number): Promise<Product[]> {
-    return this.productService.findByCategory(id);
+  getProductsByCategory(
+    @Param('id') id: number,
+    @Query() productsQuery: ProductsQuery,
+  ): Promise<Product[]> {
+    return this.productService.findByCategory(id, productsQuery);
   }
 
   @ApiOperation({ summary: 'Get product by id' })

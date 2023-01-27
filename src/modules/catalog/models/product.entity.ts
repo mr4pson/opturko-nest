@@ -27,9 +27,9 @@ export class Product {
   @Column()
   price: number;
 
-  @ApiProperty()
-  @Column()
-  number: number;
+  // @ApiProperty()
+  // @Column()
+  // number: number;
 
   @ApiProperty()
   @Column({ unique: true })

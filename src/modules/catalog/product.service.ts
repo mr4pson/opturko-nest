@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Connection, DeleteResult, Equal, Repository } from 'typeorm';
+import { Between, Connection, DeleteResult, Equal, Repository } from 'typeorm';
+import { ProductsQuery } from './classes/product-query.interface';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './models/product.entity';
 
@@ -17,11 +18,17 @@ export class ProductService {
     });
   }
 
-  async findByCategory(categoryId: number): Promise<Product[]> {
+  async findByCategory(
+    categoryId: number,
+    productsQuery: ProductsQuery,
+  ): Promise<Product[]> {
     const products = await this.productRepository.find({
-      where: {
-        category: Equal(categoryId),
-      },
+      where: [
+        {
+          category: Equal(categoryId),
+          price: Between(productsQuery.priceFrom, productsQuery.priceTo),
+        },
+      ],
       relations: ['category'],
     });
 

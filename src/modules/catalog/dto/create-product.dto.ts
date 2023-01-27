@@ -10,12 +10,12 @@ export class CreateProductDto {
   })
   price: number;
 
-  @IsNotEmpty()
-  @ApiProperty({
-    type: Number,
-    required: true,
-  })
-  number: number;
+  // @IsNotEmpty()
+  // @ApiProperty({
+  //   type: Number,
+  //   required: true,
+  // })
+  // number: number;
 
   @IsNotEmpty()
   @ApiProperty({
