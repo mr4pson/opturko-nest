@@ -1,15 +1,30 @@
-import { CategoryService } from './category.service';
-import { CategoryController } from './category.controller';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Category } from './models/category.entity';
+import { CategoryController } from './category.controller';
+import { CategoryService } from './category.service';
+import { LanguageController } from './language.controller';
+import { LanguageService } from './language.service';
+import { Category, Language, Product, Translation } from './models';
 import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
-import { Product } from './models/product.entity';
+import { TranslationController } from './translation.controller';
+import { TranslationService } from './translation.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Category, Product])],
-  controllers: [CategoryController, ProductController],
-  providers: [CategoryService, ProductService],
+  imports: [
+    TypeOrmModule.forFeature([Category, Product, Language, Translation]),
+  ],
+  controllers: [
+    CategoryController,
+    ProductController,
+    LanguageController,
+    TranslationController,
+  ],
+  providers: [
+    CategoryService,
+    ProductService,
+    LanguageService,
+    TranslationService,
+  ],
 })
 export class CatalogModule {}
