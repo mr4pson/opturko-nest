@@ -38,6 +38,11 @@ export class TranslationService {
       men: emptyTranslation,
       children: emptyTranslation,
       categories: emptyTranslation,
+      noProducts: emptyTranslation,
+      invalidEmail: emptyTranslation,
+      invalidPassword: emptyTranslation,
+      serverError: emptyTranslation,
+      contactAdministrator: emptyTranslation,
     };
 
     return this.translationRepository.save(payload);
