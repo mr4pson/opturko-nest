@@ -66,4 +66,24 @@ export class Translation {
   @ApiProperty()
   @Column()
   categories: string;
+
+  @ApiProperty()
+  @Column()
+  noProducts: string;
+
+  @ApiProperty()
+  @Column()
+  invalidEmail: string;
+
+  @ApiProperty()
+  @Column()
+  invalidPassword: string;
+
+  @ApiProperty()
+  @Column()
+  serverError: string;
+
+  @ApiProperty()
+  @Column()
+  contactAdministrator: string;
 }
