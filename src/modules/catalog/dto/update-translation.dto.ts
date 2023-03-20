@@ -141,4 +141,18 @@ export class UpdateTranslationDto {
     required: true,
   })
   contactAdministrator: string;
+
+  @IsNotEmpty()
+  @ApiProperty({
+    type: String,
+    required: true,
+  })
+  cheapFirst: string;
+
+  @IsNotEmpty()
+  @ApiProperty({
+    type: String,
+    required: true,
+  })
+  expensiveFirst: string;
 }

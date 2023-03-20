@@ -43,6 +43,8 @@ export class TranslationService {
       invalidPassword: emptyTranslation,
       serverError: emptyTranslation,
       contactAdministrator: emptyTranslation,
+      cheapFirst: emptyTranslation,
+      expensiveFirst: emptyTranslation,
     };
 
     return this.translationRepository.save(payload);
