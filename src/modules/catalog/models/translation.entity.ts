@@ -86,4 +86,12 @@ export class Translation {
   @ApiProperty()
   @Column()
   contactAdministrator: string;
+
+  @ApiProperty()
+  @Column()
+  cheapFirst: string;
+
+  @ApiProperty()
+  @Column()
+  expensiveFirst: string;
 }
