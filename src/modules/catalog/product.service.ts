@@ -10,6 +10,8 @@ import {
 import { ProductsQuery } from './classes/product-query.interface';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './models/product.entity';
+import { IProductFilterQuery } from './filters';
+import { IPaginationResponse } from '../shared/interfaces';
 
 @Injectable()
 export class ProductService {
@@ -18,44 +20,66 @@ export class ProductService {
     this.productRepository = this.connection.getRepository(Product);
   }
 
-  async findAll(): Promise<Product[]> {
-    return this.productRepository.find({
+  async findAll(query: IProductFilterQuery): Promise<IPaginationResponse<Product>> {
+    const skip = query?.skip ? +query?.skip : 0;
+    const take = query?.limit ? +query?.limit : 2;
+
+    const products = await this.productRepository.find({
       order: { id: 'DESC' },
       relations: ['category'],
+      take,
+      skip,
     });
+
+    return {
+      data: products,
+      skip: skip,
+      limit: take,
+      totalLength: (await this.productRepository.find()).length
+    };
   }
 
   async findByCategory(
     categoryId: number,
-    productsQuery: ProductsQuery,
-  ): Promise<Product[]> {
+    query: IProductFilterQuery,
+  ): Promise<IPaginationResponse<Product>> {
+    const skip = query?.skip ? +query?.skip : 0;
+    const take = query?.limit ? +query?.limit : 2;
+
     const conditions = [
       {
         category: Equal(categoryId),
       } as any,
     ];
 
-    if (productsQuery.priceFrom === undefined && productsQuery.priceTo) {
-      conditions[0].price = Between(0, productsQuery.priceTo);
+    if (query.priceFrom === undefined && query.priceTo) {
+      conditions[0].price = Between(0, query.priceTo);
     }
 
-    if (!productsQuery.priceTo && productsQuery.priceFrom) {
-      conditions[0].price = MoreThan(productsQuery.priceFrom);
+    if (!query.priceTo && query.priceFrom) {
+      conditions[0].price = MoreThan(query.priceFrom);
     }
 
-    if (productsQuery.priceFrom >= 0 && productsQuery.priceTo > 0) {
+    if (query.priceFrom >= 0 && query.priceTo > 0) {
       conditions[0].price = Between(
-        productsQuery.priceFrom,
-        productsQuery.priceTo,
+        query.priceFrom,
+        query.priceTo,
       );
     }
 
     const products = await this.productRepository.find({
       where: conditions,
       relations: ['category'],
+      take,
+      skip,
     });
 
-    return products;
+    return {
+      data: products,
+      skip: skip,
+      limit: take,
+      totalLength: (await this.productRepository.find({ where: conditions })).length
+    };
   }
 
   async findById(id: number): Promise<Product> {

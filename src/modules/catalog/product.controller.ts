@@ -28,39 +28,39 @@ import { ProductsQuery } from './classes/product-query.interface';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './models/product.entity';
 import { ProductService } from './product.service';
+import { IProductFilterQuery } from './filters';
+import { IPaginationResponse } from '../shared/interfaces';
 
 @ApiBearerAuth()
 @ApiTags('products')
 @Controller('products')
 export class ProductController {
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService) { }
 
   @ApiOperation({ summary: 'Get all products' })
   @ApiResponse({
     status: 200,
     description: 'Return all products.',
-    type: Product,
-    isArray: true,
+    type: IPaginationResponse,
   })
   @ApiUnauthorizedResponse({ status: 401, description: 'Unauthorized.' })
   @Get('')
-  getProducts(): Promise<Product[]> {
-    return this.productService.findAll();
+  getProducts(@Query() query: IProductFilterQuery): Promise<IPaginationResponse<Product>> {
+    return this.productService.findAll(query);
   }
 
   @ApiOperation({ summary: 'Get products by category' })
   @ApiResponse({
     status: 200,
     description: 'Return products by category.',
-    type: Product,
-    isArray: true,
+    type: IPaginationResponse,
   })
   @ApiUnauthorizedResponse({ status: 401, description: 'Unauthorized.' })
   @Get('byCategory/:id')
   getProductsByCategory(
     @Param('id') id: number,
-    @Query() productsQuery: ProductsQuery,
-  ): Promise<Product[]> {
+    @Query() productsQuery: IProductFilterQuery,
+  ): Promise<IPaginationResponse<Product>> {
     return this.productService.findByCategory(id, productsQuery);
   }
 
