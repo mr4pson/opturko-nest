@@ -4,10 +4,10 @@ import {
   Connection,
   DeleteResult,
   Equal,
+  Like,
   MoreThan,
   Repository,
 } from 'typeorm';
-import { ProductsQuery } from './classes/product-query.interface';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './models/product.entity';
 import { IProductFilterQuery } from './filters';
@@ -23,10 +23,21 @@ export class ProductService {
   async findAll(query: IProductFilterQuery): Promise<IPaginationResponse<Product>> {
     const skip = query?.skip ? +query?.skip : 0;
     const take = query?.limit ? +query?.limit : 2;
+    const code = query?.code ? +query?.code : undefined;
+    const conditions = [];
+
+    if (code) {
+      conditions.push(
+        {
+          code: Like(`%${code}%`),
+        } as any
+      );
+    }
 
     const products = await this.productRepository.find({
       order: { id: 'DESC' },
       relations: ['category'],
+      where: conditions.length ? conditions : undefined,
       take,
       skip,
     });
@@ -35,7 +46,7 @@ export class ProductService {
       data: products,
       skip: skip,
       limit: take,
-      totalLength: (await this.productRepository.find()).length
+      totalLength: (await this.productRepository.find({ where: conditions.length ? conditions : undefined })).length
     };
   }
 
@@ -45,12 +56,20 @@ export class ProductService {
   ): Promise<IPaginationResponse<Product>> {
     const skip = query?.skip ? +query?.skip : 0;
     const take = query?.limit ? +query?.limit : 2;
-
+    const code = query?.code ? +query?.limit : undefined;
     const conditions = [
       {
         category: Equal(categoryId),
       } as any,
     ];
+
+    if (code) {
+      conditions.push(
+        {
+          code: Like(`%${code}%`),
+        } as any
+      );
+    }
 
     if (query.priceFrom === undefined && query.priceTo) {
       conditions[0].price = Between(0, query.priceTo);
