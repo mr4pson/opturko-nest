@@ -24,7 +24,9 @@ export class ProductService {
     const skip = query?.skip ? +query?.skip : 0;
     const take = query?.limit ? +query?.limit : 2;
     const code = query?.code ? +query?.code : undefined;
+    const priceSort = query?.priceSort ?? undefined;
     const conditions = [];
+    let order = { id: 'DESC' } as any;
 
     if (code) {
       conditions.push(
@@ -34,8 +36,14 @@ export class ProductService {
       );
     }
 
+    if (priceSort) {
+      order = {
+        price: priceSort
+      }
+    }
+
     const products = await this.productRepository.find({
-      order: { id: 'DESC' },
+      order,
       relations: ['category'],
       where: conditions.length ? conditions : undefined,
       take,
@@ -57,11 +65,13 @@ export class ProductService {
     const skip = query?.skip ? +query?.skip : 0;
     const take = query?.limit ? +query?.limit : 2;
     const code = query?.code ? +query?.limit : undefined;
+    const priceSort = query?.priceSort ?? undefined;
     const conditions = [
       {
         category: Equal(categoryId),
       } as any,
     ];
+    let order = { id: 'DESC' } as any;
 
     if (code) {
       conditions.push(
@@ -69,6 +79,12 @@ export class ProductService {
           code: Like(`%${code}%`),
         } as any
       );
+    }
+
+    if (priceSort) {
+      order = {
+        price: priceSort
+      }
     }
 
     if (query.priceFrom === undefined && query.priceTo) {
@@ -87,6 +103,7 @@ export class ProductService {
     }
 
     const products = await this.productRepository.find({
+      order,
       where: conditions,
       relations: ['category'],
       take,
