@@ -30,6 +30,7 @@ import { Product } from './models/product.entity';
 import { ProductService } from './product.service';
 import { IProductFilterQuery } from './filters';
 import { IPaginationResponse } from '../shared/interfaces';
+import { UploadProductsDto } from './dto';
 
 @ApiBearerAuth()
 @ApiTags('products')
@@ -75,6 +76,20 @@ export class ProductController {
   getProductById(@Param('id') id: number): Promise<Product> {
     return this.productService.findById(id);
   }
+  
+  @ApiOperation({ summary: 'Upload products' })
+  @ApiOkResponse({
+    status: 201,
+    description: 'Products has been successfully uploaded.',
+    type: Number,
+  })
+  @ApiUnauthorizedResponse({ status: 401, description: 'Unauthorized.' })
+  @Post('/upload')
+  @HasRoles(RoleType.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async uploadProducts(@Body() payload: UploadProductsDto): Promise<any> {
+    return await this.productService.upload(payload);
+  }
 
   @ApiOperation({ summary: 'Create product' })
   @ApiCreatedResponse({
@@ -108,6 +123,7 @@ export class ProductController {
   ): Promise<Product> {
     return this.productService.update(id, product);
   }
+
 
   @ApiOperation({ summary: 'Remove product' })
   @ApiOkResponse({

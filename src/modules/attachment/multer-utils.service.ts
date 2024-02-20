@@ -30,6 +30,7 @@ export class MulterUtils {
       },
       // Check the mimetypes to allow for upload
       fileFilter: (req: any, file: any, cb: any) => {
+        console.log(file.mimetype);
         if (file.mimetype.match(`/(${filesAllowed})$`)) {
           // Allow storage of file
           cb(null, true);

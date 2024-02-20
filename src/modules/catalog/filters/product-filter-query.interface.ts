@@ -6,5 +6,8 @@ export class IProductFilterQuery extends IPaginationQueryFilter {
   code?: number;
 
   @ApiPropertyOptional()
+  brand?: string;
+
+  @ApiPropertyOptional()
   priceSort?: string;
 }

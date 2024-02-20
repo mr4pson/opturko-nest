@@ -9,10 +9,12 @@ import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
 import { TranslationController } from './translation.controller';
 import { TranslationService } from './translation.service';
+import { CsvModule } from 'nest-csv-parser';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Category, Product, Language, Translation]),
+    CsvModule
   ],
   controllers: [
     CategoryController,
