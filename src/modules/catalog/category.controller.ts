@@ -26,6 +26,7 @@ import { RoleType } from '../shared/enum/role-type.enum';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './models/category.entity';
+import { Product } from './models';
 
 @ApiBearerAuth()
 @ApiTags('categories')
@@ -104,6 +105,20 @@ export class CategoryController {
     @Body() category: CreateCategoryDto,
   ): Promise<Category> {
     return this.categoryService.update(id, category);
+  }
+
+  @ApiOperation({ summary: 'Purge category' })
+  @ApiOkResponse({
+    status: 201,
+    description: 'The category has been successfully purged.',
+    type: Number,
+  })
+  @ApiUnauthorizedResponse({ status: 401, description: 'Unauthorized.' })
+  @Post('purge/:id')
+  @HasRoles(RoleType.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async purgeCategory(@Param('id') id: number): Promise<Product[]> {
+    return await this.categoryService.purge(id);
   }
 
   @ApiOperation({ summary: 'Remove category' })

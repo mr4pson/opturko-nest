@@ -47,6 +47,10 @@ export class Product {
   @Column()
   image: string;
 
+  @ApiProperty()
+  @Column()
+  brand: string;
+
   @ApiProperty({
     type: () => Category,
   })
